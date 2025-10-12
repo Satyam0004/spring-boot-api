@@ -6,13 +6,17 @@ import com.codewithmosh.store.dtos.UpdateUserRequest;
 import com.codewithmosh.store.dtos.UserDto;
 import com.codewithmosh.store.mappers.UserMapper;
 import com.codewithmosh.store.repositories.UserRepository;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -52,7 +56,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDto> createUser(
-            @RequestBody RegisterUserRequest request,
+            @Valid @RequestBody RegisterUserRequest request,
             UriComponentsBuilder uriBuilder) {
         var user = userMapper.toEntity(request);
         userRepository.save(user);
@@ -106,5 +110,17 @@ public class UserController {
         userRepository.save(user);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationErrors(
+            MethodArgumentNotValidException exception
+    ) {
+        var errors = new HashMap<String, String>();
+        exception.getBindingResult().getFieldErrors().forEach((error) -> {
+            errors.put(error.getField(), error.getDefaultMessage());
+        });
+
+        return ResponseEntity.badRequest().body(errors);
     }
 }
