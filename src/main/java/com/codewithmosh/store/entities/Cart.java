@@ -22,7 +22,7 @@ public class Cart {
     @Column(name = "date_created", insertable = false, updatable = false)
     private LocalDate dateCreated;
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.MERGE)
     private Set<CartItem> cartItems = new LinkedHashSet<>();
 
 }
