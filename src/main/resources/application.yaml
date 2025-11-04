@@ -9,5 +9,5 @@ spring:
     show-sql: true
   jwt:
     secret: ${JWT_SECRET}
-    accessTokenExpiration: 300 #5m
+    accessTokenExpiration: 1000 #5m
     refreshTokenExpiration: 604800 # 7d
