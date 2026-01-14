@@ -1,9 +1,7 @@
-package com.codewithmosh.store.dtos;
+package com.codewithmosh.store.users;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter
